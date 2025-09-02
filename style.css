@@ -371,7 +371,7 @@ input[type="text"] {
     height: 72px;
     border-radius: 15px;
     position: sticky;
-    bottom: 10px;
+    bottom: 0px;
     z-index: 1;
     display: flex;
     margin-left: 5px;
