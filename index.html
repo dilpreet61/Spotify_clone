@@ -11,7 +11,6 @@
 
 <body>
     <div class="container">
-        <!-- Navbar -->
         <nav class="navbar flex">
             <div class="nav-left flex">
                 <div class="logo">
@@ -38,13 +37,13 @@
                 <li class="loginli"><button class="loginbtn">Log in</button></li>
             </ul>
         </nav>
-
-        <!-- Menubar for small screens -->
         <div class="menubar">
-            <div class="close1 invert">
-                <img src="./svgs/close.svg" alt="">
-            </div>
+             <div class="close1 invert">
+                    <img src="./svgs/close.svg" alt="">
+                </div>
+
             <ul class="menulink">
+
                 <li>Premium</li>
                 <li>Support</li>
                 <li>Download</li>
@@ -53,9 +52,7 @@
                 <li class="loginli"><button class="loginbtn">Log in</button></li>
             </ul>
         </div>
-
-        <!-- Left Sidebar -->
-        <div class="left">
+        <div class="left ">
             <div class="heading">
                 <img class="svg" src="./svgs/playlist.svg" alt="">
                 <h3>My Library</h3>
@@ -63,10 +60,10 @@
                     <img src="./svgs/close.svg" alt="">
                 </div>
             </div>
-            <div class="library">
+            <div class="library ">
                 <div class="songslist">
                     <ul class="">
-                        <!-- Songs will be injected here -->
+
                     </ul>
                 </div>
             </div>
@@ -79,46 +76,76 @@
                     <li><a href="https://www.spotify.com/in-en/accessibility/">Accessibility</a></li>
                 </ul>
             </div>
-        </div>
 
-        <!-- Right Section -->
+        </div>
         <div class="right">
             <div class="spotifyPlaylists">
                 <div class="playlistheading">
+
                     <div class="playlist1">
                         <img class="svg" src="./svgs/playlist.svg" alt="">
                     </div>
                     <h1>Spotify Playlists</h1>
                 </div>
 
-                <!-- Dynamic Cards will be added here -->
-                <div class="cardContainer"></div>
+                <div class="cardContainer">
+                   
+                    <div data-folder="waheguru" class="card  squareborderradius">
+                        <div class="play">
+                            <img src="./svgs/play.svg" alt="">
+                        </div>
 
-                <!-- Playbar -->
+                        <img src="./images/pokemon2.jpg" alt="">
+                        <h2>Waheguru</h2>
+                        <p>Hits to boost your mood and fill you with happiness!</p>
+                    </div>
+                    <div data-folder="playlist" class="card  squareborderradius">
+                        <div class="play">
+                            <img src="./svgs/play.svg" alt="">
+                        </div>
+
+                        <img src="./images/pokemon2.jpg" alt="">
+                        <h2>Playlist</h2>
+                        <p>Hits to boost your mood and fill you with happiness!</p>
+                    </div>
+                   
+
+                </div>
+
                 <div class="playbar">
                     <div class="seekbar roundedborder">
-                        <div class="circle"></div>
+
+                        <div class="circle">
+
+                        </div>
                     </div>
                     <div class="seekbar2 roundedborder"></div>
-                    <div class="songinfo"></div>
+                    <div class="songinfo">
+
+                    </div>
                     <div class="songbuttons">
                         <img id="previous" class="songbuttonsvg prevsong" src="./svgs/prevsong.svg" alt="">
                         <img id="play" class="songbuttonsvg playbutton" src="./svgs/play1.svg" alt="">
                         <img id="next" class="songbuttonsvg nextsong" src="./svgs/nextsong.svg" alt="">
                     </div>
                     <div class="timevol">
-                        <div class="songtime"></div>
+
+                        <div class="songtime">
+                            
+                        </div>
                         <div class="volume">
                             <img class="invert volumesvg" src="./svgs/volume.svg" alt="">
-                            <input type="range" name="volume" id="volumeinput">
+                            <input type="range"  name="volume"  id="volumeinput" >
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
         </div>
     </div>
 
-    <!-- Script -->
     <script src="script.js"></script>
 </body>
 

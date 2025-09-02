@@ -1,101 +1,228 @@
+console.log("this is my javascript")
 let currentSong = new Audio();
-let songs = [];
-let currentFolder = "";
-let currentIndex = 0;
-
-// Function to load songs from a folder
-async function loadSongs(folder, listId) {
-    currentFolder = folder;
-    try {
-        let response = await fetch(`songs/${folder}/songs.json`);
-        let data = await response.json();
-        songs = data.songs;
-
-        let ul = document.getElementById(listId);
-        ul.innerHTML = ""; // clear old list
-
-        songs.forEach((song, index) => {
-            let li = document.createElement("li");
-            li.classList.add("song-item");
-            li.innerHTML = `
-                <span>${song.replace(".mp3", "")}</span>
-                <button class="play-btn">▶</button>
-            `;
-
-            li.querySelector(".play-btn").addEventListener("click", () => {
-                playMusic(index);
-            });
-
-            ul.appendChild(li);
-        });
-    } catch (err) {
-        console.error(`Error loading songs from ${folder}:`, err);
+let songs;
+let songsul;
+function formatTime(totalSeconds) {
+    if (isNaN(totalSeconds) || totalSeconds === undefined) {
+        return "00:00";
     }
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = Math.floor(totalSeconds % 60);
+
+    // pad with leading zero if less than 10
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(seconds).padStart(2, '0');
+
+    return `${formattedMinutes}:${formattedSeconds}`;
 }
 
-// Function to play song by index
-function playMusic(index) {
-    if (index < 0 || index >= songs.length) return;
+async function getsongs(folder) {
 
-    currentIndex = index;
-    currentSong.src = `songs/${currentFolder}/${songs[index]}`;
-    currentSong.play();
+    let songs = [];
+    let a = await fetch(`/songs/${folder}`);
+    let response = await a.text();
+    let div = document.createElement('div');
+    div.innerHTML = response;
+    let as = div.getElementsByTagName('a');
+    for (let i = 0; i < as.length; i++) {
+        let href = as[i].href;
+        if (as[i].href.endsWith("mp3")) {
+            songs.push(as[i].href)
+        }
 
-    // Update play button icon
-    document.querySelectorAll(".play-btn").forEach((btn, i) => {
-        btn.textContent = i === index ? "⏸" : "▶";
+    }
+
+
+
+    songsul = document.querySelector(".songslist ul");
+    playmusic(songs[0].split("songs/")[1].replaceAll("_", " ").split(".")[0], true);
+    console.log("songs: " + songs)
+    songsul.innerHTML = "";
+    for (const element of songs) {
+        let songname = element.split("songs/")[1].replaceAll("_", " ").split(".")[0];
+        let newli = `<li class=" m2 songlis">
+                        <img class="invert music" src="./svgs/music.svg" alt="">
+                        <div class="info">
+                            <div>${songname.split("/")[1]}</div>
+                            <div> : by Dilpreet</div>
+                        </div>
+                        <div class="playnow">
+                            <div class="play1">
+
+                                <img src="./svgs/play.svg" alt="">
+                            </div>
+                        </div>
+                    </li>`;
+
+        songsul.innerHTML += newli;
+    }
+
+
+    Array.from(document.querySelector(".songslist").getElementsByTagName("li")).forEach(e => {
+        e.addEventListener("click", Element => {
+            e.querySelector(".play1 img").src = "./svgs/pause.svg"
+            playmusic(`${folder}/` + e.querySelector(".info").firstElementChild.innerText)
+            // console.log("clicked")
+        })
+    })
+    return songs;
+
+}
+
+function playmusic(trackname, pause = false) {
+    console.log("trackname :", trackname)
+
+    let songsrc = "/songs/" + trackname.replaceAll(" ", "_") + ".mp3";
+
+    currentSong.src = songsrc;
+
+    // Reset all song buttons to play icon
+    Array.from(songsul.getElementsByTagName("li")).forEach(li => {
+        // li.querySelector(".play1 img");
+        li.querySelector(".play1 img").src = "./svgs/play.svg";
     });
 
-    // Show song name
-    document.getElementById("currentSongName").innerText = songs[index].replace(".mp3", "");
-}
+    if (!pause) {
+        // Find the current song in the list and change its button to pause
+        Array.from(songsul.getElementsByTagName("li")).forEach(li => {
+            const liTrackName = li.querySelector(".info").firstElementChild.innerText.replaceAll(" ", "_");
+            const compareTrackName = trackname.split("/")[1]?.replaceAll(" ", "_");
+            if (liTrackName === compareTrackName) {
+                li.querySelector(".play1 img").src = "./svgs/pause.svg";
+            }
+        });
 
-// Play/Pause toggle button
-document.getElementById("masterPlay").addEventListener("click", () => {
-    if (currentSong.paused) {
+
+        play.src = "./svgs/pause1.svg";
         currentSong.play();
-        document.getElementById("masterPlay").textContent = "⏸";
-    } else {
-        currentSong.pause();
-        document.getElementById("masterPlay").textContent = "▶";
     }
-});
+    console.log(currentSong.src)
+    // console.log(currentSong.currentTime," : ",currentSong.duration);
+    document.querySelector(".songinfo").innerHTML = trackname.split("/")[1];
 
-// Next button
-document.getElementById("next").addEventListener("click", () => {
-    playMusic((currentIndex + 1) % songs.length);
-});
-
-// Previous button
-document.getElementById("prev").addEventListener("click", () => {
-    playMusic((currentIndex - 1 + songs.length) % songs.length);
-});
-
-// Seekbar update
-currentSong.addEventListener("timeupdate", () => {
-    let progress = (currentSong.currentTime / currentSong.duration) * 100;
-    document.getElementById("seekbar").value = progress || 0;
-
-    // update timer
-    document.getElementById("timer").innerText =
-        `${formatTime(currentSong.currentTime)} / ${formatTime(currentSong.duration)}`;
-});
-
-// Seekbar change (manual seeking)
-document.getElementById("seekbar").addEventListener("input", (e) => {
-    currentSong.currentTime = (e.target.value / 100) * currentSong.duration;
-});
-
-// Format time as mm:ss
-function formatTime(seconds) {
-    if (isNaN(seconds)) return "00:00";
-    let min = Math.floor(seconds / 60);
-    let sec = Math.floor(seconds % 60);
-    return `${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
 }
+async function main() {
 
-// Load both playlists when page loads
-window.onload = () => {
-    loadSongs("waheguru", "waheguruList");
-    loadSongs("playlist", "playlistList");
-};
+
+    // songs = await getsongs("waheguru")
+
+
+    // getsongs("waheguru")
+    window.addEventListener("load", async () => {
+        await getsongs("waheguru");
+    });
+
+
+    play.addEventListener("click", () => {
+        if (currentSong.paused) {
+            play.src = "./svgs/pause1.svg";
+            Array.from(songsul.getElementsByTagName("li")).forEach(li => {
+                if (li.querySelector(".info").firstElementChild.innerText === document.querySelector(".songinfo").innerHTML) {
+                    li.querySelector(".play1 img").src = "./svgs/pause.svg";
+
+                }
+            });
+
+            currentSong.play();
+
+        }
+        else {
+            play.src = "./svgs/play1.svg";
+            currentSong.pause();
+            Array.from(songsul.getElementsByTagName("li")).forEach(li => {
+                if (li.querySelector(".info").firstElementChild.innerText === document.querySelector(".songinfo").innerHTML) {
+                    li.querySelector(".play1 img").src = "./svgs/play.svg";
+                }
+            });
+
+
+        }
+    })
+
+    currentSong.addEventListener("timeupdate", () => {
+        if (currentSong.duration && !isNaN(currentSong.duration)) {
+            document.querySelector(".songtime").innerHTML = `${formatTime(currentSong.currentTime)} / ${formatTime(currentSong.duration)}`
+            document.querySelector(".circle").style.left = `${currentSong.currentTime / currentSong.duration * 99}%`;
+            document.querySelector(".seekbar2").style.width = `${currentSong.currentTime / currentSong.duration * 98}%`;
+        }
+        if (currentSong.currentTime === currentSong.duration) {
+            document.querySelector(".circle").style.transform = "translate(10%, 0)";
+            play.src = "./svgs/play1.svg";
+            Array.from(songsul.getElementsByTagName("li")).forEach(li => {
+                if (li.querySelector(".info").firstElementChild.innerText === document.querySelector(".songinfo").innerHTML) {
+                    li.querySelector(".play1 img").src = "./svgs/play.svg";
+                }
+            });
+            let index = songs.indexOf(currentSong.src);
+        let songname = songs[(index + 1) % songs.length].split("songs/")[1].replaceAll("_", " ").split(".")[0];
+        playmusic(songname);
+
+        }
+        if (currentSong.currentTime == 0) {
+            document.querySelector(".circle").style.transform = "translate(-48%, 0)";
+
+        }
+
+    })
+
+    currentSong.addEventListener("loadedmetadata", () => {
+        document.querySelector(".songtime").innerHTML = `${formatTime(currentSong.currentTime)} / ${formatTime(currentSong.duration)}`
+    })
+
+    document.querySelector(".seekbar").addEventListener("click", e => {
+        console.log(e.target.getBoundingClientRect().width, e.offsetX)
+        // total                           clicked
+        let percent = (e.offsetX / e.target.getBoundingClientRect().width * 100);
+        document.querySelector(".seekbar2").style.width = (e.offsetX / e.target.getBoundingClientRect().width * 98) + "%";
+        document.querySelector(".circle").style.left = percent + "%";
+        currentSong.currentTime = (currentSong.duration * percent) / 100;
+    })
+
+    document.querySelector(".playlist1").addEventListener("click", () => {
+        document.querySelector(".left").style.left = "0%";
+    })
+    document.querySelector(".close").addEventListener("click", () => {
+        document.querySelector(".left").style.left = "-110%";
+    })
+    document.querySelector(".hamburger").addEventListener("click", () => {
+        document.querySelector(".menubar").style.top = "0%"
+    })
+    document.querySelector(".close1").addEventListener("click", () => {
+        document.querySelector(".menubar").style.top = "-100%";
+    })
+    previous.addEventListener("click", () => {
+
+        let index = songs.indexOf(currentSong.src);
+        if (index != 0) {
+
+            let songname = songs[(index - 1) % songs.length].split("songs/")[1].replaceAll("_", " ").split(".")[0];
+            playmusic(songname);
+        }
+
+
+    })
+    next.addEventListener("click", () => {
+        let index = songs.indexOf(currentSong.src);
+        let songname = songs[(index + 1) % songs.length].split("songs/")[1].replaceAll("_", " ").split(".")[0];
+        playmusic(songname);
+    })
+
+    document.querySelector(".volume").getElementsByTagName("input")[0].addEventListener("change", (e) => {
+        currentSong.volume = e.target.value / 100;
+    })
+
+
+
+    //add dynamic folder songs
+    document.querySelectorAll(".card").forEach(e => {
+        e.addEventListener("click", async () => {
+            songs = await getsongs(`${e.dataset.folder}`)
+            play.src = "./svgs/play1.svg"
+            console.log(e)
+
+        })
+        // console.log(e)
+    })
+}
+main();
