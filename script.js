@@ -4,6 +4,7 @@ let currentIndex = 0;
 
 // Format time mm:ss
 function formatTime(seconds) {
+    if (isNaN(seconds)) return "00:00";
     let mins = Math.floor(seconds / 60);
     let secs = Math.floor(seconds % 60);
     if (mins < 10) mins = "0" + mins;
@@ -44,10 +45,11 @@ function playSong(index) {
     currentIndex = index;
     currentSong.src = songs[index];
     currentSong.play();
+
     updatePlayIcons();
 
-    document.querySelector(".current-song").innerText = songs[index].split("/").pop().replaceAll("_", " ").replace(".mp3", "");
-    document.querySelector(".play img").src = "./svgs/pause.svg";
+    document.querySelector(".songinfo").innerText = songs[index].split("/").pop().replaceAll("_", " ").replace(".mp3", "");
+    document.querySelector("#play").src = "./svgs/pause.svg";
 }
 
 // Update play icons in list
@@ -66,10 +68,10 @@ function updatePlayIcons() {
 function togglePlay() {
     if (currentSong.paused) {
         currentSong.play();
-        document.querySelector(".play img").src = "./svgs/pause.svg";
+        document.querySelector("#play").src = "./svgs/pause.svg";
     } else {
         currentSong.pause();
-        document.querySelector(".play img").src = "./svgs/play1.svg";
+        document.querySelector("#play").src = "./svgs/play1.svg";
     }
     updatePlayIcons();
 }
@@ -92,8 +94,10 @@ function setupSeekBar() {
     let circle = document.querySelector(".circle");
 
     currentSong.addEventListener("timeupdate", () => {
-        let progress = (currentSong.currentTime / currentSong.duration) * 100;
-        circle.style.left = progress + "%";
+        if (!isNaN(currentSong.duration)) {
+            let progress = (currentSong.currentTime / currentSong.duration) * 100;
+            circle.style.left = progress + "%";
+        }
 
         document.querySelector(".songtime").innerText =
             `${formatTime(currentSong.currentTime)} / ${formatTime(currentSong.duration)}`;
@@ -115,9 +119,9 @@ async function main() {
     await getSongs();
     setupSeekBar();
 
-    document.querySelector(".play").addEventListener("click", togglePlay);
-    document.querySelector(".next").addEventListener("click", nextSong);
-    document.querySelector(".previous").addEventListener("click", prevSong);
+    document.querySelector("#play").addEventListener("click", togglePlay);
+    document.querySelector("#next").addEventListener("click", nextSong);
+    document.querySelector("#previous").addEventListener("click", prevSong);
 }
 
 main();
