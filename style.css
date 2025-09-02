@@ -371,7 +371,7 @@ input[type="text"] {
     height: 72px;
     border-radius: 15px;
     position: sticky;
-    bottom: 0;
+    bottom: 10px;
     z-index: 1;
     display: flex;
     margin-left: 5px;
@@ -576,7 +576,7 @@ input[type="text"] {
         position: absolute;
         top: 71px;
         z-index: 4;
-        width: 370px;
+        width: 360px;
     }
 
     .right {
