@@ -1,0 +1,60 @@
+.border{
+    border: 2px solid rgb(227, 207, 207);
+
+}
+.roundedborder{
+    border: 2px solid rgb(229, 214, 214);
+    border-radius: 20px;
+
+}
+.m2{
+  margin: 5px;
+}
+.roundborder{
+    border-radius: 50%;
+}
+.svg{
+    width: 27px;
+    height: 27px;
+}
+
+.flex{
+    display: flex;
+}
+.justify-center{
+    justify-content: center;
+}
+.items-center{
+    align-items: center;
+}
+.invert{
+    filter: invert(1);
+}
+.squareborderradius{
+border-radius: 5px;
+}
+/* Works on Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 10px;              /* width of vertical scrollbar */
+  height: 10px;             /* height of horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;      /* track color (dark background) */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;         /* scrollbar handle color */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;         /* on hover */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;            /* "auto" or "thin" */
+  scrollbar-color: #444 #1a1a1a;    /* thumb color | track color */
+}
