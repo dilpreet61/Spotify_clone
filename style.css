@@ -321,7 +321,7 @@ input[type="text"] {
 }
 
 
-.spotifyPlaylists .card:hover{
+.spotifyPlaylists .card:hover {
     background-color: #2A2A2A;
 
 }
@@ -410,25 +410,23 @@ input[type="text"] {
     right: 5px;
     top: 22px;
 }
-.volume{
+
+.volume {
     display: flex;
     align-items: center;
     gap: 2px;
-    
+
 
 }
+
 .volume input {
     width: 70px;
     height: 4px;
-    display: none;
+    /* display: none; */
 
 }
-.volumesvg{
-    transition: all 1s linear;
-}
-.volume:hover input {
-   display: flex;
-}
+
+
 
 
 
@@ -479,7 +477,7 @@ input[type="text"] {
 .songslist {
     padding: 17px 0px;
     height: 66vh;
-    overflow: auto  ;
+    overflow: auto;
 }
 
 .songslist ul {
@@ -568,7 +566,8 @@ input[type="text"] {
     position: absolute;
     top: 71px;
     z-index: 4; */
-@media (max-width:1230px) {
+
+@media (max-width:500px) {
     .left {
         /* background-color: red; */
         left: -110%;
@@ -577,6 +576,18 @@ input[type="text"] {
         top: 71px;
         z-index: 4;
         width: 300px;
+    }
+}
+
+@media (max-width:1230px) {
+    .left {
+        /* background-color: red; */
+        left: -110%;
+        transition: all 0.5s linear;
+        position: absolute;
+        top: 71px;
+        z-index: 4;
+        width: 375px;
     }
 
     .right {
@@ -597,6 +608,17 @@ input[type="text"] {
 
 
 }
+@media (max-width:500px) {
+    .left {
+        /* background-color: red; */
+        left: -110%;
+        transition: all 0.5s linear;
+        position: absolute;
+        top: 71px;
+        z-index: 4;
+        width: 300px;
+    }
+}
 
 @media(max-width:955px) {
     .navlink {
@@ -609,17 +631,18 @@ input[type="text"] {
         right: 10px;
         cursor: pointer;
     }
-    .songbuttonsvg {
-    width: 30px;
-    cursor: pointer;
-    /* transition: all 0.3s ease-in-out; */
-}
 
-.timevol {
-    display: block;
-    position: absolute;
-    right: 5px;
-    top: 15px;
-}
+    .songbuttonsvg {
+        width: 30px;
+        cursor: pointer;
+        /* transition: all 0.3s ease-in-out; */
+    }
+
+    .timevol {
+        display: block;
+        position: absolute;
+        right: 5px;
+        top: 15px;
+    }
 
 }
