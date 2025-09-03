@@ -104,7 +104,7 @@ input[type="text"] {
 
 .right {
     width: 67vw;
-    height: 85vh;
+    height: 80vh;
 
     margin: 2px;
     grid-area: rightside;
